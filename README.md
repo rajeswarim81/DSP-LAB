@@ -1,2 +1,2 @@
 # DSP-LAB
-It contains assignments from DSP Lab, Autumn Semester, 2018, ECE, IIT KGP.
+It contains assignments from DSP Lab, Spring Semester, 2018, ECE, IIT KGP.
