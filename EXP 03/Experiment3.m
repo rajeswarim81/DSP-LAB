@@ -1,6 +1,8 @@
 clear;
 clc;
-%%
+
+%%THIS FILE HAS CODES FOR DESIGNING LPF USING WINDOWS
+%%THE FILE imgfiltering.m has the codes for 2D image filtering
 N = 65;
 wc = 0.3*pi;
 %%
@@ -127,3 +129,62 @@ xlim([-0.9 1]);
 xlabel('Normalized Frequency  (\times\pi rad/sample)');
 ylabel('Magnitude (dB)');
 title('Original IIR Filter');
+
+%% clear all;
+%%2d imAGE FILTERING
+img = imread('grayscale.png');
+figure;
+imshow(img);
+title('Original Image');
+
+img = double(img);
+meanker = repmat([1 1 1],3,1)/9;
+lker = [-1 -1 -1;-1 8 -1; -1 -1 -1];
+mimg = zeros(size(img));
+limg = zeros(size(img));
+
+
+for rows=2:length(img(:,1))-1
+    for cols = 2:length(img(1,:))-1
+        mimg(rows,cols) = sum(sum(img(rows-1:rows+1,cols-1:cols+1).*meanker));
+        limg(rows,cols) = sum(sum(img(rows-1:rows+1,cols-1:cols+1).*lker));
+      
+    end
+end
+
+figure;
+imshow(uint8(mimg))
+title('Mean Filtered Image');
+immse(mimg,img)
+
+figure;
+imshow(uint8(limg));
+title('Laplacian Filtered Image');
+immse(limg,img)
+
+%LOW PASS FILTERING
+b = zeros(size(img));
+    
+for rows=1:512
+    for cols=1:512
+        if(sqrt((rows-256)^2 + (cols-256)^2) <= 100)
+            b(rows,cols) = 1;
+        end
+    end
+end
+imgfft = fftshift(fft2(img));
+lpimg = ifft2(imgfft.*b);
+
+figure;
+imshow(uint8(abs(lpimg)));
+title('Low pass filtered Image');
+
+
+
+
+
+
+
+
+
+
